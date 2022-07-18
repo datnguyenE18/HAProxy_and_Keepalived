@@ -32,24 +32,17 @@ Rất dễ nhận ra điểm yếu của hệ thống nằm ở Loadbalancer HAP
 
 ***
 **Keepalived Failover IP hoạt động:**
-  - Keepalived sẽ gom nhóm các máy chủ dịch vụ nào tham gia cụm HA, khởi tạo một Virtual Server đại diện cho một nhóm thiết bị đó với một Virtual IP (VIP) và một địa chỉ MAC vật lý của máy chủ dịch vụ đang giữ Virtual IP đó
- 
-  - Vào mỗi thời điểm nhất định, chỉ có một server dịch vụ dùng địa chỉ MAC này tương ứng Virtual IP. Khi có ARP request gởi tới virtual IP thì server dịch vụ đó sẽ trả về địa chỉ MAC này
- 
-  - Các máy chủ dịch vụ sử dụng chung VIP phải liên lạc với nhau bằng địa chỉ multicast 224.0.0.18 bằng giao thức VRRP. Các máy chủ sẽ có độ ưu tiên (priority) trong khoảng từ 1 – 254, và máy chủ nào có độ ưu tiên cao nhất sẽ thành Master, các máy chủ còn lại sẽ thành các Slave/Backup, hoạt động ở chế độ chờ.
+  - Ví dụ có 2 load balancer chạy Nginx (có thể đổi thành HAProxy tùy ý) phân tải cho 2 web server Nginx ở phía sau. 2 load balancer này sẽ được cấu hình dùng chung một VIP. Bình thường thì VIP này sẽ cho node Master phụ trách, node Backup sẽ ở trạng thái chờ:
 
 ![keepalived-3 1](https://user-images.githubusercontent.com/43572616/177679691-d26c368a-c0ca-4a60-a581-7076ebe08511.png)
 
 
 
-- Các server dịch vụ dùng chung Virtual IP sẽ có 2 trạng thái là **MASTER/ACTIVE** và **BACKUP/SLAVE**. Cơ chế failover được xử lý bởi giao thức VRRP, khi khởi động dịch vụ, toàn bộ các server cấu hình dùng chung VIP sẽ gia nhập vào một nhóm multicast. Nhóm multicast này dùng để gởi/nhận các gói tin quảng bá VRRP
- 
-- Các server sẽ quảng bá độ ưu tiên (priority) của mình, server với độ ưu tiên cao nhất sẽ được chọn làm MASTER. Một khi nhóm đã có 1 MASTER thì MASTER này sẽ chịu trách nhiệm gởi các gói tin quảng bá VRRP định kỳ cho nhóm multicast.
+- Khi có sự cố xảy ra với node Master thì node Backup sẽ nhận lấy VIP này và chịu trách nhiệm phân tải về cho các backend server nằm ở sau:
+
  
 ![keepalived-3 2](https://user-images.githubusercontent.com/43572616/177679915-c122a72a-549a-4998-973e-a71282b05ee4.png)
 
-
-- Nếu vì một sự cố gì đó mà các server BACKUP không nhận được các gói tin quảng bá từ MASTER trong một khoảng thời gian nhất định thì cả nhóm sẽ bầu ra một MASTER mới. MASTER mới này sẽ tiếp quản địa chỉ VIP của nhóm và gởi các gói tin ARP báo là nó đang giữ địa chỉ VIP này. Khi MASTER cũ hoạt động bình thường trở lại thì server này có thể lại trở thành MASTER hoặc trở thành BACKUP tùy theo cấu hình độ ưu tiên của các router.
 
 ***
 **Keepalived trên Linux:**
