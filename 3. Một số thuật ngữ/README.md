@@ -125,3 +125,18 @@ Trong đó:
     - **Dynamic:** Là site seal dạng động, có thể hỗ trợ hiệu ứng hiển thị thông tin về website hoặc doanh nghiệp khi rê chuột vào. Điều này sẽ giúp người dùng tin tưởng vào website mà họ đang truy cập nhiều hơn
  
     - **Static:** Với một số chứng chỉ SSL giá rẻ thì chỉ hỗ trợ site seal dạng tĩnh, nó chỉ là một tấm ảnh và có thể đặt vào bất cứ đâu trong website nhưng sẽ không có hiệu ứng rê chuột vào hoặc không thể nhấp để xem thông tin được
+
+***
+
+- **Multicast:** 
+  - là thuật ngữ được sử dụng để mô tả cách thức truyền tin gửi từ 1 điểm đến 1 tập hợp các điểm khác, là một hình thức kết nối đa điểm. Kỹ thuật này được sử dụng theo mô hình OSI trong tầng mạng
+ 
+  - Lợi thế của nó là cùng một lúc thông điệp được gởi tới nhiều người tham gia hoặc tới một nhóm người sử dụng kín. Máy gửi chỉ cần tốc độ truyền tải dữ liệu giống như khi chỉ có một máy nhận duy nhất trong khi multicasting. Multicast hữu ích nếu 1 nhóm khách hàng yêu cầu 1 bộ dữ liệu chung cùng 1 lúc. Việc truyền tin Multicast sẽ tiết kiệm băng thông một cách đáng kể
+
+***
+
+- **Real Server:** Virtual server là một server ảo được xây dựng trên nhiều server thực, các server thực này dùng chung một public ip, do đó tương tác giữa người dùng với tập hợp server này không khác gì với một server bình thường. Request của người dùng được gởi đến load balancer (public ip của load balancer này là ip chung cho cả hệ thống server), load balancer sẽ chọn ra một real server và chuyển gói tin đến real server đó để xử lí
+ 
+***
+
+- **LVS - Linux Virtual Server**: là kỹ thuật nhóm các server đơn lẻ thành một server duy nhất mà người dùng không hề biết về sự tồn tại của các server đơn lẻ này. Server duy nhất này được gọi là Virtual Server hay còn gọi là bộ cân bằng tải – load balancer có một địa chỉ IP ảo (Virtual IP hay VIP) và đằng sau nó là các Real Server
