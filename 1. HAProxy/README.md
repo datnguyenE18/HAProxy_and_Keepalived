@@ -1,6 +1,6 @@
 # HAProxy
 
-- **HAProxy** là một proxy server, load blancer, system monitoring, được sinh ra để làm nhiệm vụ của một front end web service.
+- **HAProxy** là một proxy server, load balancer, system monitoring, được sinh ra để làm nhiệm vụ của một front end web service.
 
   Là một phần mềm sử dụng trong việc cân bằng tải, chạy trên Linux, Solaris và FreeBSD. Người dùng có thể sử dụng HAProxy để cải thiện suất hoàn thiện của các trang web và ứng dụng bằng cách phân tán khối lượng công việc của chúng trên nhiều máy chủ.
  
@@ -13,20 +13,20 @@
 ***
 
 - **Khi nào sử dụng HAProxy**
-  - Khi  làm việc với dự án nhỏ, web app chỉ cần viết bằng NodeJS dùng Pm2 để có thể chạy multithread sau đó dùng Nginx để serve static file, làm proxy cho nodejs là được. Rất ít khi lỗi, quá tải vì cơ bản là một app nhỏ, nếu sập cũng chỉ cần restart lại
+
+    - **Ví dụ:** Khi  làm việc với dự án nhỏ, web app chỉ cần viết bằng NodeJS dùng Pm2 để có thể chạy multithread sau đó dùng Nginx để serve static file, làm proxy cho nodejs là được. Rất ít khi lỗi, quá tải vì cơ bản là một app nhỏ, nếu sập cũng chỉ cần restart lại
+     
+      Nhưng khi bước vào một công ty, phải đối mặt với những vấn đề mới, khi lượng request lên tới hàng ngìn request/s thì việc scale hệ thống như thế nào để có thể đáp ứng được lượng request đó là một vấn đề cần phải giải quyết.
+
+      Về cơ bản, khi lượng request nhiều lên, sẽ có thể lựa chọn hai loại hình scale cho hệ thống đó là scale ngang và scale dọc
+      - Scale dọc tức là nâng cấp HDD lên SSD dung lượng cao, nâng cấp RAM, Vi xử lí… (đắt, chi phí cao)
  
-  - Khi bước vào một công ty, phải đối mặt với những vấn đề mới, khi lượng request lên tới hàng ngìn request/s thì việc scale hệ thống như thế nào để có thể đáp ứng được lượng request đó là một vấn đề cần phải giải quyết.
 
-    Về cơ bản, khi lượng request nhiều lên, sẽ có thể lựa chọn hai loại hình scale cho hệ thống đó là scale ngang và scale dọc
-    - scale dọc tức là nâng cấp HDD lên SSD dung lượng cao, nâng cấp RAM, Vi xử lí… (đắt, chi phí cao)
- 
-    - Scale theo chiều ngang tức là dùng thêm nhiều hệ thống tương tự như hệ thống hiện tại để chia nhau xử lí request.
+      - Scale theo chiều ngang tức là dùng thêm nhiều hệ thống tương tự như hệ thống hiện tại để chia nhau xử lí request.
 
+      Thường khi scale sẽ kết hợp cả hai kiểu scale sao cho hợp lí nhất và ít chi phí nhất. Đến đây khi các hệ thống hoạt động cùng với nhau, nảy sinh ra vấn đề làm sao để giao request này cho hệ thống kia xử lí
 
-
-Thường khi scale sẽ kết hợp cả hai kiểu scale sao cho hợp lí nhất và ít chi phí nhất. Đến đây khi các hệ thống hoạt động cùng với nhau, nảy sinh ra vấn đề làm sao để giao request này cho hệ thống kia xử lí
-
-Haproxy sinh ra để giải quyết vấn đề này, haproxy sẽ làm vai trò của một proxy server, theo dõi tình trạng các node và sẽ gửi request đến các node
+    => Vì thế Haproxy sinh ra để giải quyết vấn đề này, haproxy sẽ làm vai trò của một proxy server, theo dõi tình trạng các node và sẽ gửi request đến các node
 
 ***
 
@@ -55,7 +55,9 @@ Haproxy sinh ra để giải quyết vấn đề này, haproxy sẽ làm vai tr�
       HAProxy is an open source load balancing tool that also has the ability to implement content switching.
 
 - **Đảm bảo trong suốt (Transparent proxying):**
-  - HAProxy “ẩn” IP máy khách bằng chính IP của nó. HAProxy có thể được cấu hình để giả mạo/thay thế (Proxy) địa chỉ IP của máy khách khi thiết lập kết nối TCP với máy chủ và máy chủ nghĩ rằng đang thực hiện kết nối trực tiếp đến từ máy khách
+  - Nếu nhà cung cấp bật logging trong HAProxy thì có thể dễ dàng xem logs truy cập của người dùng/khách hàng (bao gồm cả địa chỉ IP) thông qua câu lệnh: ```docker logs <tên HAProxy Container>```
+
+  - Vì vậy HAProxy có thể có thể được cấu hình để ẩn địa chỉ IP của máy khách khi thiết lập kết nối TCP với máy chủ và máy chủ nghĩ rằng đang thực hiện kết nối trực tiếp đến từ máy khách. Bằng cách thêm dòng ```http-request set-var(txn.src_masked) src,ipmask(number)``` trong frontend tại HAProxy Config file
  
 - Ghi nhật ký chi tiết.
 - Tương tác servers bằng dòng lệnh (CLI for server management)
