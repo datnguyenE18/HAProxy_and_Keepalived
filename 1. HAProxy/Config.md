@@ -2,15 +2,11 @@
 
 Cấu hình của HAProxy thường được tạo từ 4 thành phần bao gồm global, defaults, frontend, backend. 4 thành phần sẽ định nghĩa cách HAProxy nhận, xử lý các request, điều phối các request tới các Backend phía sau
 
-
-
 - Đường dẫn file cấu hình: /etc/haproxy/haproxy.cfg
-
-
 
 - Cấu trúc tổng quan:
 
-|<p>**global**<br># Các thiết lập tổng quan</p><p>**defaults**<br># Các thiết lập mặc định</p><p>**frontend**<br># Thiết lập điều phối các request</p><p>**backend**<br> # Định nghĩa các server xử lý request</p>|
+|<p>**global**</br># Các thiết lập tổng quan</p><p>**defaults**<br># Các thiết lập mặc định</p><p>**frontend**<br># Thiết lập điều phối các request</p><p>**backend**<br> # Định nghĩa các server xử lý request</p>|
 | :- |
 
 
