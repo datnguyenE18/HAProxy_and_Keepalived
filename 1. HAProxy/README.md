@@ -1,6 +1,6 @@
 # HAProxy
 
-- **HAProxy** là một proxy server, load balancer, system monitoring, được sinh ra để làm nhiệm vụ của một front end web service.
+- **HAProxy:** là một proxy server, load balancer, system monitoring, được sinh ra để làm nhiệm vụ của một front end web service.
 
   Là một phần mềm sử dụng trong việc cân bằng tải, chạy trên Linux, Solaris và FreeBSD. Người dùng có thể sử dụng HAProxy để cải thiện suất hoàn thiện của các trang web và ứng dụng bằng cách phân tán khối lượng công việc của chúng trên nhiều máy chủ.
 - HAProxy cũng được sử dụng trong các hệ thống lớn có lưu lượng truy cập cao như GitHub, Twitter, Reddit, Bitbucket, Stack Overflow,…
