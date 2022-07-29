@@ -51,18 +51,18 @@
 
       HAProxy is an open source load balancing tool that also has the ability to implement content switching.
 </br>
-- **Đảm bảo trong suốt (Transparent proxying):**
-  - Nếu nhà cung cấp bật logging trong HAProxy thì có thể dễ dàng xem logs truy cập của người dùng/khách hàng (bao gồm cả địa chỉ IP) thông qua câu lệnh: ```docker logs <tên HAProxy Container>```
+  - **Đảm bảo trong suốt (Transparent proxying):**
+    - Nếu nhà cung cấp bật logging trong HAProxy thì có thể dễ dàng xem logs truy cập của người dùng/khách hàng (bao gồm cả địa chỉ IP) thông qua câu lệnh: ```docker logs <tên HAProxy Container>```
 
-  - Vì vậy HAProxy có thể có thể được cấu hình để ẩn địa chỉ IP của máy khách khi thiết lập kết nối TCP với máy chủ và máy chủ nghĩ rằng đang thực hiện kết nối trực tiếp đến từ máy khách. Bằng cách thêm dòng ```http-request set-var(txn.src_masked) src,ipmask(number)``` trong frontend tại HAProxy Config file
-</br>
-- Ghi nhật ký chi tiết.
-- Tương tác servers bằng dòng lệnh (CLI for server management)
-- Xác thực HTTP.
-- **Đa luồng:** Nhiều người dùng cùng lúc, xử lý nhiều yêu cầu cùng lúc
-- **Rewrite URL:** ghi lại địa chỉ website từ dạng này thành một dạng khác.
-- Kiểm tra sức khỏe nâng cao.
-- Giới hạn tần số kết nối.
+    - Vì vậy HAProxy có thể có thể được cấu hình để ẩn địa chỉ IP của máy khách khi thiết lập kết nối TCP với máy chủ và máy chủ nghĩ rằng đang thực hiện kết nối trực tiếp đến từ máy khách. Bằng cách thêm dòng ```http-request set-var(txn.src_masked) src,ipmask(number)``` trong frontend tại HAProxy Config file
+  </br>
+  - Ghi nhật ký chi tiết.
+  - Tương tác servers bằng dòng lệnh (CLI for server management)
+  - Xác thực HTTP.
+  - **Đa luồng:** Nhiều người dùng cùng lúc, xử lý nhiều yêu cầu cùng lúc
+  - **Rewrite URL:** ghi lại địa chỉ website từ dạng này thành một dạng khác.
+  - Kiểm tra sức khỏe nâng cao.
+  - Giới hạn tần số kết nối.
 
 ***
 
