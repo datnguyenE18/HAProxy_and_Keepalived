@@ -1,0 +1,70 @@
+version: "3.7"
+
+x-haproxy-defaults: &haproxy-service
+  image: "haproxy:latest"
+  volumes:
+      - "./haproxy/haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg:ro"
+
+x-keepalived-defaults: &keepalived-service
+  image: "osixia/keepalived:latest"
+  cap_add:
+    - NET_ADMIN
+    - NET_BROADCAST
+    - NET_RAW
+  environment:
+    KEEPALIVED_COMMAND_LINE_ARGUMENTS: >-
+      --log-detail
+
+networks:
+  vtnet:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
+
+services:
+
+  keepalived-a:
+    <<: *keepalived-service
+    network_mode: host
+    volumes:
+      - "./keepalived/proxy-a/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf:ro"
+
+  keepalived-b:
+    <<: *keepalived-service
+    network_mode: host
+    volumes:
+      - "./keepalived/proxy-b/keepalived.conf:/usr/local/etc/keepalived/keepalived.conf:ro"
+
+  haproxy-a:
+    <<: *haproxy-service
+    networks:
+      vtnet:
+        ipv4_address: 172.20.0.50
+        aliases:
+          - haproxy-a
+
+  haproxy-b:
+    <<: *haproxy-service
+    networks:
+      vtnet:
+        ipv4_address: 172.20.0.60
+        aliases:
+          - haproxy-b
+
+  web-b:
+    image: "nginx:stable-alpine"
+    networks:
+      vtnet:
+        aliases:
+          - web-b
+    volumes:
+      - "./web/server-b/index.html:/usr/share/nginx/html/index.html:ro"
+
+  web-a:
+    image: "nginx:stable-alpine"
+    networks:
+      vtnet:
+        aliases:
+          - web-a
+    volumes:
+      - "./web/server-a/index.html:/usr/share/nginx/html/index.html:ro"
